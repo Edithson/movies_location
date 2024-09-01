@@ -1,0 +1,31 @@
+body{
+    background-color: rgb(226, 213, 96);
+    color: rgb(1, 1, 1);
+    padding: 20px;
+}
+li{
+    list-style-type: none;
+}
+a{
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+}
+form{
+    width: 60%;
+}
+.image{
+    width: 100px;
+    height: 100px;
+    float: left;
+    margin: 10px;
+}
+.image-show{
+    width: 100%;
+    height: 100%;
+}
+.profil_photo{
+    border-radius: 130px;
+    width: 220px;
+    height: 220px;
+    margin: 0 auto;
+}
