@@ -22,9 +22,9 @@ class SeanceController extends Controller
          * ou bien seulement les seance d'un film précis
          */
         if (!is_null($film)) {
-            $seances = Seance::where('film_id', $film->id)->orderBy('date_heure', 'asc')->get();
+            $seances = Seance::where('film_id', $film->id)->orderBy('date_heure_debut', 'desc')->get();
         }else {
-            $seances = Seance::orderBy('date_heure', 'asc')->get();
+            $seances = Seance::orderBy('date_heure_debut', 'desc')->get();
         }
         $films = Film::orderBy('id', 'desc')->get();
         return view('dashboard', compact('films','seances'));
@@ -47,6 +47,7 @@ class SeanceController extends Controller
     {
         $date_debut = $request->datetime;
         $duree = Film::findOrFail($request->film)->duree;
+        $salle = Salle::findOrFail($request->salle);
 
         // Créer une instance Carbon à partir de la date
         $dateCarbon = Carbon::parse($date_debut);
@@ -60,16 +61,28 @@ class SeanceController extends Controller
             ->addMinutes((int)substr($duree, 3, 2))
             ->addSeconds((int)substr($duree, 6, 2));
         
-        // Afficher les résultats
-        Seance::create([
-            'date_heure_debut' => $dateCarbon,
-            'date_heure_fin' => $dateAvecHeure,
-            'prix' => $request->prix,
-            'film_id' => $request->film,
-            'salle_id' => $request->salle,
-        ])->saveOrFail();
-        session()->flash('msg', 'Enrégistrement ok!');
-        return redirect()->route('dashboard');
+        $DateDebut = $dateCarbon->format('Y-m-d H:i:s');
+        $DateFin = $dateAvecHeure->format('Y-m-d H:i:s');
+
+        $seances = Seance::where('salle_id', $request->salle)
+        ->where(function ($query) use ($DateDebut, $DateFin) {
+            $query->whereBetween('date_heure_debut', [$DateDebut, $DateFin])
+                ->orWhereBetween('date_heure_fin', [$DateDebut, $DateFin]);
+        })
+        ->get();
+        if ($seances->isEmpty()) {
+            Seance::create([
+                'date_heure_debut' => $dateCarbon,
+                'date_heure_fin' => $dateAvecHeure,
+                'prix' => $request->prix,
+                'film_id' => $request->film,
+                'salle_id' => $request->salle,
+            ])->saveOrFail();
+            session()->flash('msg', 'Enrégistrement ok!');
+            return redirect()->route('dashboard');
+        }else {
+            return view('seance.programmation_impossible', compact('seances', 'DateDebut', 'DateFin', 'duree', 'salle'));
+        }
     }
 
     /**
@@ -102,28 +115,40 @@ class SeanceController extends Controller
     {
         $date_debut = $request->datetime;
         $duree = Film::findOrFail($request->film)->duree;
+        $salle = Salle::findOrFail($request->salle);
 
         // Créer une instance Carbon à partir de la date
         $dateCarbon = Carbon::parse($date_debut);
-
-        // Afficher la date de début
-        $formattedDateDebut = $dateCarbon->format('d/m/Y H:i:s');
 
         // Créer une copie de $dateCarbon pour ajouter la durée
         $dateAvecHeure = $dateCarbon->copy()
             ->addHours((int)substr($duree, 0, 2))
             ->addMinutes((int)substr($duree, 3, 2))
             ->addSeconds((int)substr($duree, 6, 2));
-        dd($dateCarbon->format('Y-m-d H:i:s'));
-        $seance->update([
-            'date_heure_debut' => $dateCarbon,
-            'date_heure_fin' => $dateAvecHeure,
-            'prix' => $request->prix,
-            'film_id' => $request->film,
-            'salle_id' => $request->salle,
-        ]);
-        session()->flash('msg', 'Mise à jour ok!');
-        return redirect()->route('dashboard');
+
+        $DateDebut = $dateCarbon->format('Y-m-d H:i:s');
+        $DateFin = $dateAvecHeure->format('Y-m-d H:i:s');
+        // dd($DateDebut, $DateFin);
+        $seances = Seance::where('id', '!=', $seance->id)
+        ->where('salle_id', $request->salle)
+        ->where(function ($query) use ($DateDebut, $DateFin) {
+            $query->whereBetween('date_heure_debut', [$DateDebut, $DateFin])
+                ->orWhereBetween('date_heure_fin', [$DateDebut, $DateFin]);
+        })
+        ->get();
+        if ($seances->isEmpty()) {
+            $seance->update([
+                'date_heure_debut' => $dateCarbon,
+                'date_heure_fin' => $dateAvecHeure,
+                'prix' => $request->prix,
+                'film_id' => $request->film,
+                'salle_id' => $request->salle,
+            ]);
+            session()->flash('msg', 'Mise à jour ok!');
+            return redirect()->route('dashboard');
+        }else {
+            return view('seance.programmation_impossible', compact('seances', 'DateDebut', 'DateFin', 'duree', 'salle', 'seance'));
+        }
     }
 
     /**

@@ -47,6 +47,12 @@ class SalleController extends Controller
         //
     }
 
+    public function seance_salle(Salle $salle)
+    {
+        $seances = $salle->seances()->orderBy('date_heure_debut')->get();
+        return view('salle.seance_salle', compact('salle', 'seances'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      */

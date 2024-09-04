@@ -3,7 +3,10 @@
 @section('content')
 <ul>
 @forelse ($users as $user)
-    <li>{{$user->name}} du titre {{$user->type->intitule}} <a href="{{route('user.show', $user)}}"><button class="btn bnt-primary">Voire plus</button></a></li>
+    <li>
+        <img class="image-commentaire" src="{{Storage::url($user->profil)}}" alt=""> 
+        {{$user->name}} du titre {{$user->type->intitule}} <a href="{{route('user.show', $user)}}"><button class="btn bnt-primary">Voire plus</button></a>
+    </li>
 @empty
     <li>Aucun utilisateur trouvé</li>
 @endforelse

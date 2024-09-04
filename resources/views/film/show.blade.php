@@ -28,8 +28,11 @@
         <h3>Commentaires</h3>
         @forelse ($commentaires as $commentaire)
             <div>
+                <i>
+                    <img class="image-commentaire" src="{{Storage::url($commentaire->user->profil)}}" alt=""> 
+                    {{$commentaire->user->name}} le {{$commentaire->created_at}}
+                </i>
                 <h4>{{$commentaire->commentaire}}</h4>
-                <i>Publié par {{$commentaire->user->name}} le {{$commentaire->created_at}}</i>
                 <form action="{{route('commentaire.destroy', $commentaire)}}" method="post">
                     @csrf
                     @method('DELETE')

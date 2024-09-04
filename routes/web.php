@@ -21,10 +21,12 @@ Route::middleware('auth')->group(function () {
     Route::get('film/create', [FilmController::class, 'create'])->name('film.create');
     // Route::resource('film', FilmController::class)->except(['index','show']);
     Route::resource('seance', SeanceController::class)->except(['index','show']);
+    Route::get('seance-salle/{salle}', [SalleController::class, 'seance_salle'])->name('seance.salle');
     Route::resource('salle', SalleController::class);
     Route::post('commentaire/{film}/store', [CommentaireController::class, 'store'])->name('commentaire.store');
     Route::resource('commentaire', CommentaireController::class)->except(['index','show','store']);
     Route::post('reservation/{seance}/store', [ReservationController::class, 'store'])->name('reservation.store');
+    Route::post('reservation/validate/{seance}', [ReservationController::class, 'validate'])->name('reservation.validate');
     Route::resource('reservation', ReservationController::class)->except(['store']);
     Route::get('user/{id}/restore', [UserController::class, 'restore'])->name('user.restore')->whereNumber('id');
     Route::get('user/index-delete', [UserController::class, 'index_delete'])->name('user.index-delete');

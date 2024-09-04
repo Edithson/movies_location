@@ -16,7 +16,7 @@
 <h2>Nos salles</h2>
 <div>
     @forelse ($salles as $salle)
-        <p>{{$salle->nom}}</p>
+        <a href="{{route('seance.salle', $salle)}}"><p>{{$salle->nom}}</p></a>
         <button class="btn btn-primary"><a href="{{route('salle.edit', $salle)}}">Modifier</a></button>
         <form action="{{route('salle.destroy', $salle)}}" method="post">
         @csrf

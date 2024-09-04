@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="{{asset('css/style1.css')}}">
 </head>
 <body>
-    @component('components.notification')@endcomponent
     @include('layouts.navigation')
+    @component('components.notification')@endcomponent
     @yield('content')
 <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
 </body>

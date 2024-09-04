@@ -32,6 +32,32 @@ class ReservationController extends Controller
      */
     public function store(StoreReservationRequest $request, Seance $seance)
     {
+        $DateDebut = $seance->date_heure_debut;
+        $DateFin = $seance->date_heure_fin;
+        $nbr_place = $request->nbr_place;
+        $seances = Seance::whereHas('reservations', function($query) {
+            $query->where('user_id', 2);
+        })
+        ->where(function($query) use ($DateDebut, $DateFin) {
+            $query->whereBetween('date_heure_debut', [$DateDebut, $DateFin])
+                  ->orWhereBetween('date_heure_fin', [$DateDebut, $DateFin]);
+        })
+        ->get();
+        if ($seances->isEmpty()) {
+            Reservation::create([
+                'seance_id' => $seance->id,
+                'user_id' => Auth::user()->id,
+                'nbr_place' => $request->nbr_place
+            ])->saveOrFail();
+            session()->flash('msg', 'votre réservation a été enrégistré<br/>Nous vous recontacterons pour vous indiquez le moyen de payement afin de finaliser votre réservation');
+            return redirect()->route('seance.show', $seance);
+        }else{
+            return view('reservation.validation', compact('seances', 'seance', 'nbr_place'));
+        }
+        
+    }
+
+    public function validate(StoreReservationRequest $request, Seance $seance){
         Reservation::create([
             'seance_id' => $seance->id,
             'user_id' => Auth::user()->id,
