@@ -10,6 +10,7 @@ use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
 // Route::clear();
 
+
 Route::resource('seance', SeanceController::class);
 Route::get('/', [SeanceController::class, 'index'])->name('dashboard');
 Route::resource('film', FilmController::class);
@@ -30,6 +31,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('reservation', ReservationController::class)->except(['store']);
     Route::get('user/{id}/restore', [UserController::class, 'restore'])->name('user.restore')->whereNumber('id');
     Route::get('user/index-delete', [UserController::class, 'index_delete'])->name('user.index-delete');
+
+    Route::delete('user/delete_count', [UserController::class, 'delete_count'])->name('user.delete_count');
     Route::resource('user', UserController::class)->except(['store','edit']);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

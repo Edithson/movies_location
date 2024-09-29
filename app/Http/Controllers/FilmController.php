@@ -10,6 +10,7 @@ use Illuminate\Support\Carbon;
 use App\Http\Requests\StoreFilmRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UpdateFilmRequest;
+use Illuminate\Support\Facades\Gate;
 
 class FilmController extends Controller
 {
@@ -36,6 +37,9 @@ class FilmController extends Controller
      */
     public function create()
     {
+        if (!(Gate::allows('gerant_right'))) {
+            abort('403');
+        }
         return view('film.create');
     }
 
@@ -84,6 +88,9 @@ class FilmController extends Controller
      */
     public function edit(Film $film)
     {
+        if (!(Gate::allows('gerant_right'))) {
+            abort('403');
+        }
         return view('film.edit', compact('film'));
     }
 

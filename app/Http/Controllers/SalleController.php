@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Salle;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\StoreSalleRequest;
 use App\Http\Requests\UpdateSalleRequest;
 
@@ -58,6 +59,9 @@ class SalleController extends Controller
      */
     public function edit(Salle $salle)
     {
+        if (!(Gate::allows('admin_right'))) {
+            abort('403');
+        }
         return view('salle.edit', compact('salle'));
     }
 

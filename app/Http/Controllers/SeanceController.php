@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Film;
 use App\Models\Salle;
 use App\Models\Seance;
 use App\Models\Reservation;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\StoreSeanceRequest;
 use App\Http\Requests\UpdateSeanceRequest;
 
@@ -26,6 +27,7 @@ class SeanceController extends Controller
         }else {
             $seances = Seance::orderBy('date_heure_debut', 'desc')->get();
         }
+        //dd($seances);
         $films = Film::orderBy('id', 'desc')->get();
         return view('dashboard', compact('films','seances'));
     }
@@ -35,6 +37,9 @@ class SeanceController extends Controller
      */
     public function create()
     {
+        if (!(Gate::allows('gerant_right'))) {
+            abort('403');
+        }
         $films = Film::orderBy('titre')->get();
         $salles = Salle::orderBy('nom')->get();
         return view('seance.create', compact('films', 'salles'));
@@ -72,8 +77,8 @@ class SeanceController extends Controller
         ->get();
         if ($seances->isEmpty()) {
             Seance::create([
-                'date_heure_debut' => $dateCarbon,
-                'date_heure_fin' => $dateAvecHeure,
+                'date_heure_debut' => $DateDebut,
+                'date_heure_fin' => $DateFin,
                 'prix' => $request->prix,
                 'film_id' => $request->film,
                 'salle_id' => $request->salle,
@@ -90,11 +95,13 @@ class SeanceController extends Controller
      */
     public function show(Seance $seance)
     {
-        /**y'a un ptt soucis ici que je dois réglé */
         $place_total = $seance->salle->taille;
         $place_reserve = Reservation::where('seance_id', '=', ''.$seance->id.'')->sum('nbr_place');
         $place_dispo = $place_total-$place_reserve;
-        $reservation = Reservation::where('user_id', Auth::user()->id)->where('seance_id', $seance->id)->first();
+        $reservation = null;
+        if (isset(Auth::user()->id)) {
+            $reservation = Reservation::where('user_id', Auth::user()->id)->where('seance_id', $seance->id)->first();
+        }
         return view('seance.show', compact('seance', 'place_dispo', 'reservation'));
     }
 
@@ -103,6 +110,9 @@ class SeanceController extends Controller
      */
     public function edit(Seance $seance)
     {
+        if (!(Gate::allows('gerant_right'))) {
+            abort('403');
+        }
         $films = Film::orderBy('titre')->get();
         $salles = Salle::orderBy('nom')->get();
         return view('seance.edit', compact('films', 'salles', 'seance'));

@@ -1,15 +1,16 @@
 @extends('index')
 
 @section('content')
-<ul>
+<table class="table table-striped">
 @forelse ($users as $user)
-    <li>
-        <img class="image-commentaire" src="{{Storage::url($user->profil)}}" alt=""> 
-        {{$user->name}} du titre {{$user->type->intitule}} <a href="{{route('user.show', $user)}}"><button class="btn bnt-primary">Voire plus</button></a>
-    </li>
+    <tr>
+        <td><img class="image-commentaire" src="{{Storage::url($user->profil)}}" alt=""> </td>
+        <td>{{$user->name}} du type {{$user->type->intitule}}</td>
+        <td><a href="{{route('user.show', $user)}}"><button class="btn btn-primary">Voire plus</button></a></td>
+    </tr>
 @empty
-    <li>Aucun utilisateur trouvé</li>
+    <tr>Aucun utilisateur trouvé</tr>
 @endforelse
-</ul><br>
+</table><br>
 <a href="{{route('user.index-delete')}}"><button class="btn btn-warning">Voire les utilisateurs désactivés</button></a>
 @endsection

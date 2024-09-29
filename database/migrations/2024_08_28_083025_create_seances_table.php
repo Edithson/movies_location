@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('seances', function (Blueprint $table) {
             $table->id();
-            $table->datetime('date_heure');
+            $table->timestamp('date_heure_debut');
+            $table->timestamp('date_heure_fin');
             $table->bigInteger('prix');
             $table->foreignIdFor(Film::class)->onDelete('cascade');
             $table->foreignIdFor(Salle::class)->onDelete('cascade');

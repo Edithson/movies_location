@@ -1,6 +1,6 @@
 body{
     color: rgb(1, 1, 1);
-    padding: 0px;
+    padding: 10px;
     background-image: url('../media/background_3.jpg');
     background-blend-mode: normal;
     background-attachment: fixed;
@@ -17,7 +17,7 @@ body{
     --auth_conteneur: rgba(225, 225, 225, 0.7);
 }
 .content{
-    padding: 50px;
+    padding: 15px;
     width: 95%;
     margin: 0 auto;
 }
@@ -29,14 +29,14 @@ a{
     color: var(--text_dark_color);
 }
 form{
-    width: 70%;
-    min-width: 300px;
+    width: 90%;
+    min-width: 150px;
 }
 .image{
-    width: 100px;
-    height: 100px;
+    width: 30px;
+    height: 30px;
     float: left;
-    margin: 10px;
+    margin: 5px;
 }
 .image-show{
     width: 100%;
@@ -46,6 +46,7 @@ form{
     border-radius: 130px;
     width: 220px;
     height: 220px;
+    margin-left: 45px;
 }
 .image-commentaire{
     width: 30px;
@@ -53,76 +54,47 @@ form{
     border-radius: 20px;
 }
 .nav_bar{
+    display: none;
     width: 100%;
-    height: 50px;
+    height: 100vh;
     background-color: var(--nav_bar);
     position: fixed;
-    margin-top: -25px;
-    padding-left: -10px;
+    padding-left: 40px;
+    margin-top: -10px;
+    margin-left: -10px;
+    padding-top: 20px;
     z-index: 1;
-    display: block;
 }
-.nav_bar ul li a{
-    float: left;
+.nav_bar ul li a, .nav_bar div div a{
+    font-size: x-large;
+    font-weight: bold;
+    padding-left: 10px;
     display: grid;
-    width: 12%;
+    width: 95%;
     height: 50px;
     background-color: var(--nav_bar);
     color: var(--text_dark_color);
-    text-align: center;
-    place-items: center;
+    place-items: left;
     transition: 0.5s;
+}
+.nav_bar div div a{
+    padding-left: 40px;
+    margin-left: 0px;
 }
 .nav_bar ul li a:hover, .profil_option div a:hover, .profil_option a:hover{
     background-color: var(--nav_bar_hover);
     font-weight: bolder;
     transition: 0.5s;
 }
-.profil_option{
-    width: 200px;
-    height: 100%;
-    float: right;
-    margin-top: -16px;
-    background-color:var(--nav_bar);
-    display: grid;
-    place-items: center;
-}
-.profil_option ul{
-    margin-top: 10px;
-}
-.profil_option div a{
-    color: var(--text_dark_color);
-    transition: 0.5s;
-}
-.profil_option ul li a, .profil_option ul li ul li a{
-    width: 110px;
-    height: 30px;
-    color: var(--text_dark_color);
-}
-.profil_option li{
-    float: left;
-    position: relative;
-    z-index: 200;
-}
-.profil_option li ul{
-    margin-left: -143px;
-    margin-top: 30px;
-    position: absolute;
-    display: none;
-}
-.profil_option li:hover ul{
-    display: inline-block;
-    transition: 0.5s;
-}
 .seance-index img{
     width: 100%;
-    height: 220px;
+    height: 160px;
 }
 .seance-index{
     background-color: var(--seance_index);
     margin: 2px;
     padding: 6px;
-    width: 32%;
+    width: 100%;
     min-width: 250px;
     float: left;
     transition: 0.5s;
@@ -135,7 +107,7 @@ form{
     transition: 0.5s;
 }
 .commentaire{
-    width: 90%;
+    width: 100%;
     min-width: 250px;
     padding: 10px;
     margin: 5px;
@@ -158,21 +130,46 @@ form{
     margin: 0 auto;
 }
 .info-user{
-    margin-top: 50px;
+    margin-top: 80px;
     display: block;
 }
 .auth_conteneur{
-    width: 70%;
+    width: 100%;
     margin: 0 auto;
-    padding: 20px;
     border-radius: 10px;
-    padding-left: 150px;
-    padding-right: 50px;
+    padding: 10px;
     text-align: justify;
     background-color: var(--auth_conteneur);
 }
 textarea, input, table{
     opacity: 0.8;
+}
+.table-salle{
+    display: block;
+    margin-left: -25px;
+}
+.show_menu, .hide_menu{
+    display: block;
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    margin-left: -10px;
+    margin-top: -10px;
+    z-index: 2;
+}
+.hide_menu{
+    display: none;
+    color:  var(--text_clair_color);
+    background-color: red;
+    font-size: xx-large;
+    text-align: center;
+    font-weight: bold;
+}
+.show_menu div{
+    height: 7px;
+    width: 100%;
+    margin-top: 7px;
+    background-color: var(--nav_bar_hover);
 }
 .hide{
     display: none;

@@ -21,3 +21,10 @@ La plateforme de réservation de films est un projet intéressant qui peut vous 
 10. _Gestion des statistiques_ : Créez un système de statistiques pour suivre les réservations, les ventes, les évaluations, etc.
 
 En incluant ces fonctionnalités, vous pouvez créer une plateforme de réservation de films complète et efficace. Bonne chance avec votre projet !
+
+Entrez de bonandjo
+aliance
+cour d'appel du littoral
+chanas
+catédrale akwa
+Cathédrale St Pierre et Paul de Bonadibong

@@ -49,7 +49,7 @@ class ReservationController extends Controller
                 'user_id' => Auth::user()->id,
                 'nbr_place' => $request->nbr_place
             ])->saveOrFail();
-            session()->flash('msg', 'votre réservation a été enrégistré<br/>Nous vous recontacterons pour vous indiquez le moyen de payement afin de finaliser votre réservation');
+            session()->flash('msg', 'votre réservation a été enrégistré. Nous vous recontacterons pour vous indiquez le moyen de payement afin de finaliser votre réservation');
             return redirect()->route('seance.show', $seance);
         }else{
             return view('reservation.validation', compact('seances', 'seance', 'nbr_place'));
@@ -63,7 +63,7 @@ class ReservationController extends Controller
             'user_id' => Auth::user()->id,
             'nbr_place' => $request->nbr_place
         ])->saveOrFail();
-        session()->flash('msg', 'votre réservation a été enrégistré<br/>Nous vous recontacterons pour vous indiquez le moyen de payement afin de finaliser votre réservation');
+        session()->flash('msg', 'votre réservation a été enrégistré. Nous vous recontacterons pour vous indiquez le moyen de payement afin de finaliser votre réservation');
         return redirect()->route('seance.show', $seance);
     }
 
@@ -95,7 +95,7 @@ class ReservationController extends Controller
             'nbr_place' => $request->nbr_place
         ]);
         $seance = $reservation->seance;
-        session()->flash('msg', 'votre réservation a été enrégistré<br/>Nous vous recontacterons pour vous indiquez le moyen de payement afin de finaliser votre réservation');
+        session()->flash('msg', 'votre réservation a été enrégistré. Nous vous recontacterons pour vous indiquez le moyen de payement afin de finaliser votre réservation');
         return redirect()->route('seance.show', $seance);
     }
 

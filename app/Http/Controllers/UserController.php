@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Type;
 use App\Models\User;
+use App\Models\Commentaire;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -15,15 +17,15 @@ class UserController extends Controller
      */
     public function index() //affichez tout les utilisateurs actif de l'application
     {
-        $users = User::orderBy('name')->get();
-        $types = Type::all();
+        $users = User::where('type_id', '!=', '4')->orderBy('email')->get();
+        $types = Type::where('id', '!=', '4')->get();
         return view('user.index',compact('users', 'types'));
     }
 
     public function index_delete() //affichez tout les utilisateurs désactivé de l'application
     {
         $users = User::onlyTrashed()->orderBy('name')->get();
-        $types = Type::all();
+        $types = Type::where('id', '!=', '4')->get();
         return view('user.index_delete',compact('users', 'types'));
     }
 
@@ -48,7 +50,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $types = Type::all();
+        $types = Type::where('id', '!=', '4')->get();
         return view('user.show',compact('user', 'types'));
     }
 
@@ -87,6 +89,21 @@ class UserController extends Controller
         $user->delete();
         session()->flash('msg', 'Suspention de l\'utilisateur réussie!');
         return redirect()->route('user.index');
+    }
+
+    public function delete_count(Request $request){
+        Commentaire::where('user_id', Auth::user()->id)->delete();
+        Reservation::where('user_id', Auth::user()->id)->delete();
+        $user = Auth::user();
+        
+        $user->delete();
+
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        
+        return redirect()->route('seance.index');
     }
 
 }

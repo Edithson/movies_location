@@ -14,6 +14,6 @@
     <label for="exampleFormControlInput4" class="form-label">Durée du film : </label>
     <input type="time" step="1" name="duree" value="{{$film->duree}}" class="form-control" id="exampleFormControlInput4" required><br><br>
     <input type="submit" value="Mettre à jour" name="Validate" class="btn btn-success">
-</form>
-<button class="btn btn-danger"><a href="{{route('film.index')}}">Retour</a></button>
+</form><br>
+<a href="{{route('film.show', $film)}}"><button class="btn btn-danger">Retour</button></a>
 @endsection
